@@ -24,6 +24,11 @@ if ! command -v gemini >/dev/null 2>&1; then
     echo "   Continuing installation..."
 fi
 
+if ! command -v codex >/dev/null 2>&1; then
+    echo "⚠️  Warning: 'codex' CLI not found in PATH."
+    echo "   Continuing installation..."
+fi
+
 # --- Download function ---
 download_file() {
     local url="$1"
@@ -43,8 +48,10 @@ download_file() {
 
 # --- Create directories ---
 mkdir -p "$TARGET_DIR/scripts/gemini"
+mkdir -p "$TARGET_DIR/scripts/codex"
 mkdir -p "$TARGET_DIR/commands"
 mkdir -p "$TARGET_DIR/logs/gemini"
+mkdir -p "$TARGET_DIR/logs/codex"
 
 # --- Download Gemini scripts ---
 GEMINI_SCRIPTS=("new.sh" "continue.sh")
@@ -53,8 +60,16 @@ for script in "${GEMINI_SCRIPTS[@]}"; do
     chmod +x "$TARGET_DIR/scripts/gemini/$script"
 done
 
+# --- Download Codex scripts ---
+CODEX_SCRIPTS=("new.sh" "continue.sh")
+for script in "${CODEX_SCRIPTS[@]}"; do
+    download_file "$REPO_BASE_URL/scripts/codex/$script" "$TARGET_DIR/scripts/codex/$script"
+    chmod +x "$TARGET_DIR/scripts/codex/$script"
+done
+
 # --- Download commands ---
 download_file "$REPO_BASE_URL/commands/gemini.md" "$TARGET_DIR/commands/gemini.md"
+download_file "$REPO_BASE_URL/commands/codex.md" "$TARGET_DIR/commands/codex.md"
 
 # --- Summary ---
 echo ""
@@ -63,10 +78,15 @@ echo ""
 echo "📁 Installed to: $TARGET_DIR/"
 echo "   scripts/gemini/new.sh"
 echo "   scripts/gemini/continue.sh"
+echo "   scripts/codex/new.sh"
+echo "   scripts/codex/continue.sh"
 echo "   commands/gemini.md"
+echo "   commands/codex.md"
 echo ""
 echo "🔧 Configuration (optional):"
-echo "   export GEMINI_MODEL=\"flash\"  # default: pro"
+echo "   export GEMINI_MODEL=\"flash\"    # default: pro"
+echo "   export CODEX_MODEL=\"gpt-4o\"    # default: gpt-5.2"
 echo ""
 echo "🚀 Usage:"
 echo "   ./$TARGET_DIR/scripts/gemini/new.sh \"Your prompt here\""
+echo "   ./$TARGET_DIR/scripts/codex/new.sh \"Your prompt here\""
