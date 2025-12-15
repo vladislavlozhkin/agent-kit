@@ -18,7 +18,7 @@ argument-hint: [тема для обсуждения с Gemini]
 ```
 
 Скрипт автоматически:
-- Создаёт лог-файл в `.claude/logs/gemini/`
+- Создаёт лог-файл в `.claude/logs/gemini/dialog/`
 - Записывает запрос и ответ
 - Обновляет symlink `latest.md`
 

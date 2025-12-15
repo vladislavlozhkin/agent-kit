@@ -18,7 +18,7 @@ argument-hint: [тема для обсуждения с Codex]
 ```
 
 Скрипт автоматически:
-- Создаёт лог-файл в `.claude/logs/codex/`
+- Создаёт лог-файл в `.claude/logs/codex/dialog/`
 - Записывает запрос и ответ
 - Обновляет symlink `latest.md`
 

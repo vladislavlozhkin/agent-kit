@@ -12,7 +12,7 @@ if [ -z "$PROJECT_ROOT" ]; then
   exit 1
 fi
 
-LOG_DIR="${PROJECT_ROOT}/.claude/logs/codex"
+LOG_DIR="${PROJECT_ROOT}/.claude/logs/codex/dialog"
 LATEST_LOG_SYMLINK="${LOG_DIR}/latest.md"
 MODEL="${CODEX_MODEL:-gpt-5.2}"
 

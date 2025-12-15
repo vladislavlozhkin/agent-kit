@@ -51,8 +51,9 @@ mkdir -p "$TARGET_DIR/scripts/gemini"
 mkdir -p "$TARGET_DIR/scripts/codex"
 mkdir -p "$TARGET_DIR/commands/gemini"
 mkdir -p "$TARGET_DIR/commands/codex"
-mkdir -p "$TARGET_DIR/logs/gemini"
-mkdir -p "$TARGET_DIR/logs/codex"
+mkdir -p "$TARGET_DIR/logs/gemini/dialog"
+mkdir -p "$TARGET_DIR/logs/codex/dialog"
+mkdir -p "$TARGET_DIR/logs/codex/review"
 
 # --- Download Gemini scripts ---
 GEMINI_SCRIPTS=("new.sh" "continue.sh")
@@ -62,7 +63,7 @@ for script in "${GEMINI_SCRIPTS[@]}"; do
 done
 
 # --- Download Codex scripts ---
-CODEX_SCRIPTS=("new.sh" "continue.sh")
+CODEX_SCRIPTS=("new.sh" "continue.sh" "review.sh")
 for script in "${CODEX_SCRIPTS[@]}"; do
     download_file "$REPO_BASE_URL/scripts/codex/$script" "$TARGET_DIR/scripts/codex/$script"
     chmod +x "$TARGET_DIR/scripts/codex/$script"
@@ -71,6 +72,7 @@ done
 # --- Download commands ---
 download_file "$REPO_BASE_URL/commands/gemini/dialog.md" "$TARGET_DIR/commands/gemini/dialog.md"
 download_file "$REPO_BASE_URL/commands/codex/dialog.md" "$TARGET_DIR/commands/codex/dialog.md"
+download_file "$REPO_BASE_URL/commands/codex/review.md" "$TARGET_DIR/commands/codex/review.md"
 
 # --- Summary ---
 echo ""
@@ -81,8 +83,10 @@ echo "   scripts/gemini/new.sh"
 echo "   scripts/gemini/continue.sh"
 echo "   scripts/codex/new.sh"
 echo "   scripts/codex/continue.sh"
+echo "   scripts/codex/review.sh"
 echo "   commands/gemini/dialog.md"
 echo "   commands/codex/dialog.md"
+echo "   commands/codex/review.md"
 echo ""
 echo "🔧 Configuration (optional):"
 echo "   export GEMINI_MODEL=\"flash\"    # default: pro"

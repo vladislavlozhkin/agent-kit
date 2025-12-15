@@ -12,15 +12,23 @@ if [ -z "$PROJECT_ROOT" ]; then
   exit 1
 fi
 
-LOG_DIR="${PROJECT_ROOT}/.claude/logs/codex"
+LOG_DIR="${PROJECT_ROOT}/.claude/logs/codex/dialog"
 LATEST_LOG_SYMLINK="${LOG_DIR}/latest.md"
+# Fallback to old location for backward compatibility
+OLD_LOG_DIR="${PROJECT_ROOT}/.claude/logs/codex"
+OLD_SYMLINK="${OLD_LOG_DIR}/latest.md"
 MODEL="${CODEX_MODEL:-gpt-5.2}"
 
 # --- Find Active Chat ---
 if ! [ -e "$LATEST_LOG_SYMLINK" ]; then
-  echo "⚠️  Error: No active chat found."
-  echo "   Start a new one with 'codex/new.sh'." >&2
-  exit 1
+  # Try old location for backward compatibility
+  if [ -e "$OLD_SYMLINK" ]; then
+    LATEST_LOG_SYMLINK="$OLD_SYMLINK"
+  else
+    echo "⚠️  Error: No active chat found."
+    echo "   Start a new one with 'codex/new.sh'." >&2
+    exit 1
+  fi
 fi
 
 LOG_FILE=$(readlink "${LATEST_LOG_SYMLINK}")
