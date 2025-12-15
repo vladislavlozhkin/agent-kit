@@ -14,7 +14,7 @@ fi
 
 LOG_DIR="${PROJECT_ROOT}/.claude/logs/gemini"
 LATEST_LOG_SYMLINK="${LOG_DIR}/latest.md"
-MODEL="pro"
+MODEL="${GEMINI_MODEL:-pro}"
 
 mkdir -p "$LOG_DIR"
 

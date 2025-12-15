@@ -53,3 +53,21 @@ curl -fsSL https://raw.githubusercontent.com/vladislavlozhkin/ai-utils-agent-kit
 
 ### Логирование
 Все диалоги сохраняются в `.claude/logs/gemini/`. Файл `latest.md` всегда указывает на последнюю активную сессию.
+
+## Конфигурация
+
+### Переменные окружения
+
+| Переменная | По умолчанию | Описание |
+| :--- | :--- | :--- |
+| `GEMINI_MODEL` | `pro` | Модель Gemini для использования (например, `flash`, `pro`, `2.0-flash-exp`) |
+
+**Пример:**
+```bash
+# Использовать более быструю модель
+export GEMINI_MODEL="flash"
+./.claude/scripts/gemini/new.sh "Быстрый вопрос"
+
+# Или для одного вызова
+GEMINI_MODEL="2.0-flash-exp" ./.claude/scripts/gemini/new.sh "Тест новой модели"
+```

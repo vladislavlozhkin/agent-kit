@@ -14,7 +14,7 @@ fi
 
 LOG_DIR="${PROJECT_ROOT}/.claude/logs/gemini"
 LATEST_LOG_SYMLINK="${LOG_DIR}/latest.md"
-MODEL="pro"
+MODEL="${GEMINI_MODEL:-pro}"
 
 # --- Find Active Chat ---
 if ! [ -e "$LATEST_LOG_SYMLINK" ]; then
