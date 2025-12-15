@@ -49,7 +49,8 @@ download_file() {
 # --- Create directories ---
 mkdir -p "$TARGET_DIR/scripts/gemini"
 mkdir -p "$TARGET_DIR/scripts/codex"
-mkdir -p "$TARGET_DIR/commands"
+mkdir -p "$TARGET_DIR/commands/gemini"
+mkdir -p "$TARGET_DIR/commands/codex"
 mkdir -p "$TARGET_DIR/logs/gemini"
 mkdir -p "$TARGET_DIR/logs/codex"
 
@@ -68,8 +69,8 @@ for script in "${CODEX_SCRIPTS[@]}"; do
 done
 
 # --- Download commands ---
-download_file "$REPO_BASE_URL/commands/gemini.md" "$TARGET_DIR/commands/gemini.md"
-download_file "$REPO_BASE_URL/commands/codex.md" "$TARGET_DIR/commands/codex.md"
+download_file "$REPO_BASE_URL/commands/gemini/dialog.md" "$TARGET_DIR/commands/gemini/dialog.md"
+download_file "$REPO_BASE_URL/commands/codex/dialog.md" "$TARGET_DIR/commands/codex/dialog.md"
 
 # --- Summary ---
 echo ""
@@ -80,8 +81,8 @@ echo "   scripts/gemini/new.sh"
 echo "   scripts/gemini/continue.sh"
 echo "   scripts/codex/new.sh"
 echo "   scripts/codex/continue.sh"
-echo "   commands/gemini.md"
-echo "   commands/codex.md"
+echo "   commands/gemini/dialog.md"
+echo "   commands/codex/dialog.md"
 echo ""
 echo "🔧 Configuration (optional):"
 echo "   export GEMINI_MODEL=\"flash\"    # default: pro"
