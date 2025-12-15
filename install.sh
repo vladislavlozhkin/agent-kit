@@ -1,55 +1,73 @@
 #!/bin/bash
 
 # ==============================================================================
-# Install Script for AI-Utils Agent Kit
-# Устанавливает инструменты AI CLI (gemini и др.) в .claude/scripts/
-# Usage: curl -fsSL https://raw.githubusercontent.com/vladislavlozhkin/ai-utils-agent-kit/main/install.sh | bash
+# Install Script for Agent Kit
+# Installs AI CLI tools (gemini, etc.) into .claude/scripts/
+# Usage: curl -fsSL https://raw.githubusercontent.com/vladislavlozhkin/agent-kit/main/install.sh | bash
 # ==============================================================================
 
 set -e
 
-# TODO: Обновите URL после публикации репозитория
-REPO_BASE_URL="https://raw.githubusercontent.com/vladislavlozhkin/worktree-utils/main" 
-# ПРИМЕЧАНИЕ: Это заглушка URL для локальной разработки.
-
+REPO_BASE_URL="https://raw.githubusercontent.com/vladislavlozhkin/agent-kit/main"
 TARGET_DIR=".claude"
 
-echo "🚀 Installing AI-Utils Agent Kit..."
+echo "🚀 Installing Agent Kit..."
 
-# 1. Создание целевых директорий
-mkdir -p "$TARGET_DIR/scripts"
-mkdir -p "$TARGET_DIR/commands"
+# --- Check dependencies ---
+if ! command -v git >/dev/null 2>&1; then
+    echo "❌ Error: git is required but not installed." >&2
+    exit 1
+fi
 
-# Функция загрузки (заглушка)
+if ! command -v gemini >/dev/null 2>&1; then
+    echo "⚠️  Warning: 'gemini' CLI not found in PATH."
+    echo "   Install it with: npm install -g @anthropic-ai/gemini-cli"
+    echo "   Continuing installation..."
+fi
+
+# --- Download function ---
 download_file() {
     local url="$1"
     local dest="$2"
-    
+
     echo "⬇️  Downloading $(basename "$dest")..."
-    
+
     if command -v curl >/dev/null 2>&1; then
-         # curl -fsSL "$url" -o "$dest"
-         echo "   (Simulation) curl $url -> $dest"
+        curl -fsSL "$url" -o "$dest"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -qO "$dest" "$url"
     else
-         # wget -qO "$dest" "$url"
-         echo "   (Simulation) wget $url -> $dest"
+        echo "❌ Error: curl or wget is required." >&2
+        exit 1
     fi
 }
 
-# 2. Установка скриптов Gemini
-GEMINI_SCRIPTS_DIR="$TARGET_DIR/scripts/gemini"
-mkdir -p "$GEMINI_SCRIPTS_DIR"
+# --- Create directories ---
+mkdir -p "$TARGET_DIR/scripts/gemini"
+mkdir -p "$TARGET_DIR/commands"
+mkdir -p "$TARGET_DIR/logs/gemini"
 
-# Здесь должна быть логика загрузки файлов
-GEMINI_FILES=("new.sh" "continue.sh")
-GEMINI_CMD="gemini.md"
+# --- Download Gemini scripts ---
+GEMINI_SCRIPTS=("new.sh" "continue.sh")
+for script in "${GEMINI_SCRIPTS[@]}"; do
+    download_file "$REPO_BASE_URL/scripts/gemini/$script" "$TARGET_DIR/scripts/gemini/$script"
+    chmod +x "$TARGET_DIR/scripts/gemini/$script"
+done
 
-# ... (Логика загрузки) ...
+# --- Download commands ---
+download_file "$REPO_BASE_URL/commands/gemini.md" "$TARGET_DIR/commands/gemini.md"
 
-echo "⚠️  ПРИМЕЧАНИЕ: Это шаблон установщика. Так как публичный репозиторий ещё не настроен,"
-echo "    автоматическая загрузка отключена. Пожалуйста, скопируйте файлы вручную:"
-echo "    cp -R ai-utils/agent-kit/scripts/gemini $TARGET_DIR/scripts/"
-echo "    cp ai-utils/agent-kit/commands/gemini.md $TARGET_DIR/commands/"
-
+# --- Summary ---
 echo ""
-echo "✅ Структура создана в $TARGET_DIR"
+echo "✅ Agent Kit installed successfully!"
+echo ""
+echo "📁 Installed to: $TARGET_DIR/"
+echo "   scripts/gemini/new.sh"
+echo "   scripts/gemini/continue.sh"
+echo "   commands/gemini.md"
+echo ""
+echo "🔧 Configuration (optional):"
+echo "   export GEMINI_MODEL=\"flash\"  # default: pro"
+echo ""
+echo "🚀 Usage:"
+echo "   ./$TARGET_DIR/scripts/gemini/new.sh \"Your prompt here\""
