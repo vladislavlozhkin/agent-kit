@@ -21,7 +21,6 @@ fi
 
 if ! command -v gemini >/dev/null 2>&1; then
     echo "⚠️  Warning: 'gemini' CLI not found in PATH."
-    echo "   Install it with: npm install -g @anthropic-ai/gemini-cli"
     echo "   Continuing installation..."
 fi
 
