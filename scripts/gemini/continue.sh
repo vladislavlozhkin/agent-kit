@@ -1,10 +1,14 @@
 #!/bin/bash
-# Script for continuing a dialogue with Gemini and logging it.
+
+# ==============================================================================
+# Gemini Agent: Continue Session
+# Appends a new turn to the latest chat log and sends context to the model.
+# ==============================================================================
 
 # --- Configuration ---
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 if [ -z "$PROJECT_ROOT" ]; then
-  echo "Error: could not determine git repository root." >&2
+  echo "❌ Error: Could not determine git repository root." >&2
   exit 1
 fi
 
@@ -14,13 +18,14 @@ MODEL="pro"
 
 # --- Find Active Chat ---
 if ! [ -e "$LATEST_LOG_SYMLINK" ]; then
-  echo "Error: No active chat. Start a new one with 'gemini/new.sh'." >&2
+  echo "⚠️  Error: No active chat found."
+  echo "   Start a new one with 'gemini/new.sh'." >&2
   exit 1
 fi
 
 LOG_FILE=$(readlink "${LATEST_LOG_SYMLINK}")
 if ! [ -f "$LOG_FILE" ]; then
-  echo "Error: Symlink points to non-existent file: $LOG_FILE" >&2
+  echo "❌ Error: Symlink points to non-existent file: $LOG_FILE" >&2
   exit 1
 fi
 
@@ -47,6 +52,7 @@ LOG_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 } >>"$LOG_FILE"
 
 # --- Execution (with '-r latest' added automatically) ---
+echo "🤖 Gemini (${MODEL}) thinking (Turn ${TURN_NUMBER})..."
 RESPONSE=$(gemini -r latest "$@" --model "$MODEL" --output-format text 2>&1 | grep -v "^\[STARTUP\]" | grep -v "^(node" | grep -v "^Loaded" | grep -v "^(Use")
 
 {
@@ -54,6 +60,8 @@ RESPONSE=$(gemini -r latest "$@" --model "$MODEL" --output-format text 2>&1 | gr
   echo '```'
 } >>"$LOG_FILE"
 
-# Output response for Claude to see
+# Output response for user/agent
 echo "$RESPONSE"
-echo -e "\n\033[90m[Log appended to: ${LOG_FILE}]\033[0m"
+echo ""
+echo -e "\033[90m📝 Log appended to: ${LOG_FILE}\033[0m"
+

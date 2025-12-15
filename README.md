@@ -1,43 +1,55 @@
 # AI-Utils Agent Kit
 
-A collection of CLI wrappers and scripts for AI tools, designed to be integrated into project workflows (e.g., via `.claude` or `.gemini` folders).
+Набор инструментов и оберток (wrappers) для интеграции AI-моделей в рабочий процесс командной строки. Позволяет превратить обычный CLI (Gemini, Codex) в полноценного агента с памятью и контекстом проекта.
 
-## Components
+## Компоненты
 
-### 1. Gemini Wrapper (`scripts/gemini`)
-Scripts to maintain a persistent chat context with Gemini, logging interactions to Markdown files.
+### 1. Gemini Agent (`scripts/gemini`)
+Скрипты для ведения непрерывного диалога с моделью Gemini. Обеспечивают сохранение контекста беседы в Markdown-логи, что позволяет "помнить" предыдущие реплики.
 
-- **`new.sh`**: Starts a new chat session.
-- **`continue.sh`**: Continues the latest chat session.
+| Скрипт | Описание |
+| :--- | :--- |
+| `new.sh` | Начать новую сессию (диалог). Создает новый лог-файл. |
+| `continue.sh` | Продолжить текущую сессию. Добавляет ваш запрос и ответ модели в последний лог. |
 
-**Dependencies:**
-- `gemini` CLI tool installed and available in PATH.
-- `git` (to locate project root).
+**Зависимости:**
+- Установленная утилита `gemini` в PATH.
+- `git` (для определения корня проекта).
 
-## Installation
+## Установка
 
-To add these tools to your current project:
+Чтобы добавить инструменты агента в ваш текущий проект:
 
+### Ручная установка (Локально)
 ```bash
-# Assuming you are in the root of 'ai-utils' or have it cloned
-cp -R path/to/ai-utils/agent-kit/scripts/gemini .claude/scripts/
-cp path/to/ai-utils/agent-kit/commands/gemini.md .claude/commands/
+# Из корня репозитория ai-utils
+cp -R ai-utils/agent-kit/scripts/gemini .claude/scripts/
+cp ai-utils/agent-kit/commands/gemini.md .claude/commands/
 ```
 
-*(An automated `install.sh` will be available once the repository is hosted publicly)*
+### Автоматическая установка (В будущем)
+```bash
+curl -fsSL https://raw.githubusercontent.com/vladislavlozhkin/ai-utils-agent-kit/main/install.sh | bash
+```
+*(Скрипт создаст структуру папок `.claude/` и загрузит необходимые утилиты)*
 
-## Usage
+## Использование
 
 ### Gemini
 
-Inside your project (after installation):
+Внутри вашего проекта (после установки):
 
+**1. Начать новый диалог:**
 ```bash
-# Start a new chat
-./.claude/scripts/gemini/new.sh "Hello, world!"
-
-# Continue the conversation
-./.claude/scripts/gemini/continue.sh "Refine the previous answer."
+./.claude/scripts/gemini/new.sh "Привет! Проанализируй структуру этого проекта."
 ```
+*Результат:* Создастся файл `.claude/logs/gemini/YYYY-MM-DD_HH-MM-SS.md` с ответом.
 
-Logs are stored in `.claude/logs/gemini/`.
+**2. Продолжить общение:**
+```bash
+./.claude/scripts/gemini/continue.sh "А теперь предложи рефакторинг для main.ts."
+```
+*Результат:* Контекст из предыдущего файла будет передан модели, а ответ добавлен в конец того же файла.
+
+### Логирование
+Все диалоги сохраняются в `.claude/logs/gemini/`. Файл `latest.md` всегда указывает на последнюю активную сессию.

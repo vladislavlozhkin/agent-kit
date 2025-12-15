@@ -1,10 +1,14 @@
 #!/bin/bash
-# Script for starting a new dialogue with Gemini and logging it.
+
+# ==============================================================================
+# Gemini Agent: New Session
+# Starts a new dialogue context and initializes the log file.
+# ==============================================================================
 
 # --- Configuration ---
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 if [ -z "$PROJECT_ROOT" ]; then
-  echo "Error: could not determine git repository root." >&2
+  echo "❌ Error: Could not determine git repository root." >&2
   exit 1
 fi
 
@@ -41,6 +45,7 @@ LOG_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 } >>"$LOG_FILE"
 
 # --- Execution ---
+echo "🤖 Gemini (${MODEL}) processing..."
 RESPONSE=$(gemini "$@" --model "$MODEL" --output-format text 2>&1 | grep -v "^\[STARTUP\]" | grep -v "^(node" | grep -v "^Loaded" | grep -v "^(Use")
 
 {
@@ -48,6 +53,8 @@ RESPONSE=$(gemini "$@" --model "$MODEL" --output-format text 2>&1 | grep -v "^\[
   echo '```'
 } >>"$LOG_FILE"
 
-# Output response for Claude to see
+# Output response for user/agent
 echo "$RESPONSE"
-echo -e "\n\033[90m[New chat session started. Log: ${LOG_FILE}]\033[0m"
+echo ""
+echo -e "\033[90m📝 New chat session started. Log: ${LOG_FILE}\033[0m"
+
