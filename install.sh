@@ -51,6 +51,7 @@ mkdir -p "$TARGET_DIR/scripts/gemini"
 mkdir -p "$TARGET_DIR/scripts/codex"
 mkdir -p "$TARGET_DIR/commands/gemini"
 mkdir -p "$TARGET_DIR/commands/codex"
+mkdir -p "$TARGET_DIR/agents"
 mkdir -p "$TARGET_DIR/logs/gemini/dialog"
 mkdir -p "$TARGET_DIR/logs/codex/dialog"
 mkdir -p "$TARGET_DIR/logs/codex/review"
@@ -71,8 +72,14 @@ done
 
 # --- Download commands ---
 download_file "$REPO_BASE_URL/commands/gemini/dialog.md" "$TARGET_DIR/commands/gemini/dialog.md"
+download_file "$REPO_BASE_URL/commands/gemini/agent-dialog.md" "$TARGET_DIR/commands/gemini/agent-dialog.md"
 download_file "$REPO_BASE_URL/commands/codex/dialog.md" "$TARGET_DIR/commands/codex/dialog.md"
+download_file "$REPO_BASE_URL/commands/codex/agent-dialog.md" "$TARGET_DIR/commands/codex/agent-dialog.md"
 download_file "$REPO_BASE_URL/commands/codex/review.md" "$TARGET_DIR/commands/codex/review.md"
+
+# --- Download agents ---
+download_file "$REPO_BASE_URL/agents/codex-dialog.md" "$TARGET_DIR/agents/codex-dialog.md"
+download_file "$REPO_BASE_URL/agents/gemini-dialog.md" "$TARGET_DIR/agents/gemini-dialog.md"
 
 # --- Summary ---
 echo ""
@@ -85,8 +92,12 @@ echo "   scripts/codex/new.sh"
 echo "   scripts/codex/continue.sh"
 echo "   scripts/codex/review.sh"
 echo "   commands/gemini/dialog.md"
+echo "   commands/gemini/agent-dialog.md"
 echo "   commands/codex/dialog.md"
+echo "   commands/codex/agent-dialog.md"
 echo "   commands/codex/review.md"
+echo "   agents/codex-dialog.md"
+echo "   agents/gemini-dialog.md"
 echo ""
 echo "🔧 Configuration (optional):"
 echo "   export GEMINI_MODEL=\"flash\"    # default: pro"
